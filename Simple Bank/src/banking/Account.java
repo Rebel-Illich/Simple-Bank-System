@@ -12,11 +12,12 @@ public class Account {
     private long customerAccountNumber;
     private String cardNumber;
     private int checksum;
-    private String pin;
+    private int pin;
     public Account(){
         customerAccountNumber = lastAccountNumber++;
 
         checksum = 0;
+        pin = generatePin();
     }
 
 
@@ -26,6 +27,6 @@ public class Account {
     }
 
     private static int generatePin(){
-        return 0;
+        return random.nextInt(10000);
     }
 }
