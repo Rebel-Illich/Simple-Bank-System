@@ -8,8 +8,14 @@ public class Account {
 
     private long customerAccountNumber;
     private String cardNumber;
+    private int checksum;
     private String pin;
-    private int checksum = 0;
+    public Account(){
+        customerAccountNumber = lastAccountNumber++;
+
+        checksum = 0;
+    }
+
 
 
     public String getCardNumber(){
