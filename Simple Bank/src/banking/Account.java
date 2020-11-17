@@ -1,6 +1,9 @@
 package banking;
 
+import java.util.Random;
+
 public class Account {
+    private static final Random random = new Random();
     private static final String INN = "400000";
 
     private static long lastAccountNumber =1L;
@@ -20,5 +23,9 @@ public class Account {
 
     public String getCardNumber(){
     return String.format("%s%09d%d", INN, customerAccountNumber, checksum);
+    }
+
+    private static int generatePin(){
+        return 0;
     }
 }
