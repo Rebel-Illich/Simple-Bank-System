@@ -22,7 +22,10 @@ public class Main {
 
      public static void main(String[] args) {
           log.info("Simple Banking System started.");
-          System.out.println("Hello World");
+          System.out.println("Hello World!!!");
+
+
+          new Application().run();
      }
 
 
