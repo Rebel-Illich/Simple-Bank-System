@@ -9,4 +9,10 @@ public class Account {
     private long customerAccountNumber;
     private String cardNumber;
     private String pin;
+    private int checksum = 0;
+
+
+    public String getCardNumber(){
+    return String.format("%s%09d%d", INN, customerAccountNumber, checksum);
+    }
 }
