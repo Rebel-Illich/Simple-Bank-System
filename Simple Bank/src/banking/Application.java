@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Application implements Runnable {
 
     private final Scanner scanner = new Scanner(System.in);
-    
+
     @Override
     public void run() {
         while (menu()) {
@@ -27,6 +27,14 @@ public class Application implements Runnable {
                 System.out.println("Incorrect number!");
         }
         return true;
+    }
+
+    private void createAccount() {
+        System.out.println("Your account has been created\n" +
+                "Your card number:\n" +
+                "4000004938320895\n" +
+                "Your card PIN:\n" +
+                "6826");
     }
 
 }
