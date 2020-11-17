@@ -37,4 +37,8 @@ public class Application implements Runnable {
                 "6826");
     }
 
+    private String createCardNumber(){
+        return "4000004938320895";
+    }
+
 }
