@@ -25,7 +25,9 @@ public class Main {
           System.out.println("Hello World!!!");
 
 
-          new Application().run();
+          new Application(
+                  new InMemoryDatabase()
+          ).run();
      }
 
 

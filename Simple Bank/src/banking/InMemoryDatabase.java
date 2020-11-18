@@ -7,6 +7,6 @@ public class InMemoryDatabase implements AccountsRepository {
 
     @Override
     public void addAccount(Account account) {
-        
+
     }
 }
