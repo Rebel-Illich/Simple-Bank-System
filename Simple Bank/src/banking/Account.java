@@ -20,6 +20,10 @@ public class Account {
         pin = generatePin();
     }
 
+    public String getPinNumber(){
+        return String.format("%04d", pin);
+    }
+
 
 
     public String getCardNumber(){

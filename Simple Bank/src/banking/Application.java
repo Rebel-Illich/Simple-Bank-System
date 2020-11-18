@@ -37,11 +37,15 @@ public class Application implements Runnable {
     }
 
     private void createAccount() {
+        final var account = repository.createAccount();
+
         System.out.println("Your account has been created\n" +
                 "Your card number:\n" +
                 "4000004938320895\n" +
                 "Your card PIN:\n" +
-                "6826");
+                "6826" +
+                "Your card number:\n" + account.getCardNumber() +
+                        "\nYour card PIN:\n" + account.getPinNumber());
     }
 
     private String createCardNumber(){
