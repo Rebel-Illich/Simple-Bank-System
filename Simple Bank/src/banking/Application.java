@@ -6,7 +6,7 @@ import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class Application implements Runnable {
+public final class Application implements Runnable {
     private static final Logger log = Logger.getLogger(Application.class.getName());
 
     private final Scanner scanner = new Scanner(System.in);
