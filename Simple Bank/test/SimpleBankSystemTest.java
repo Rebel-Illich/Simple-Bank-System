@@ -3,7 +3,6 @@ import banking.Main;
 import org.hyperskill.hstest.stage.StageTest;
 import org.hyperskill.hstest.testcase.CheckResult;
 import org.hyperskill.hstest.testcase.TestCase;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -23,21 +22,37 @@ import java.util.regex.Pattern;
 
 public class SimpleBankSystemTest extends StageTest<String> {
 
-    public SimpleBankSystemTest(){
+    public SimpleBankSystemTest() {
         super(Main.class);
     }
 
     private static String correctCardNumber = "";
     private static String correctPin = "";
-    private static String incorrectCardNumber = "";
+    private static String incorrectCardNumber = "2000007269641764"; //Doesn't pass Luhn algorithm
+    private static String notExistingCardNumber = "2000007269641768";
     private static String incorrectPin = "";
+    private static String toTransferCardNumber = "";
+
     private static String databaseFileName = "card.s3db";
     private static String tempDatabaseFileName = "tempDatabase.s3db";
-    private static Map<String,String> correctData = new HashMap<>();
+
+    private static Map<String, String> correctData = new HashMap<>();
+
     private static Connection connection;
+
     private static boolean isCompleted = false;
 
-     @Override
+    @Override
     public List<TestCase<String>> generate() {
         return List.of(
+
+                //Check db file
+                new TestCase<String>()
+                        .addArguments("-fileName", databaseFileName)
+                        .setInput("0")
+                        .setCheckFunc(SimpleBankSystemTest::checkDatabaseFile),
+
+
+
+                }
 }
