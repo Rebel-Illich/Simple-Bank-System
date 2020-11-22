@@ -2,36 +2,40 @@ package banking;
 
 import java.util.Random;
 
+import static java.lang.String.format;
+
 public class Account {
     private static final Random random = new Random();
     private static final String INN = "400000";
 
     private static long lastAccountNumber =1;
 
-    private long accountNumber;
-    private int checksum;
-    private int pin;
+    private final String cardNumber;
+    private String pinNumber;
     private long balance;
 
     public Account(final long id) {
         accountNumber = id;
-        checksum = LuhnAlgorithm.calculateChecksum(INN + getAccountNumber());
+       var checksum = LuhnAlgorithm.calculateChecksum(INN + getAccountNumber());
         balance = 0;
-        pin = generatePin();
+        cardNumber = format("%s%09d%d", INN, id, checksum);
+        pinNumber = format("%04d", generatePin());
     }
 
-    public String getPinNumber(){
-        return String.format("%04d", pin);
+    public Account(String card, String pin, long balance) {
+        this.cardNumber = card;
+        this.pinNumber = pin;
+        this.balance = balance;
     }
 
-    public String getAccountNumber() {
-        return String.format("%09d", accountNumber);
+    public String getPinNumber() {
+        return pinNumber;
     }
 
 
 
-    public String getCardNumber(){
-    return String.format("%s%09d%d", INN, accountNumber, checksum);
+    public String getCardNumber() {
+        return cardNumber;
     }
 
     private static int generatePin(){
@@ -40,5 +44,25 @@ public class Account {
 
     public long getBalance(){
         return balance;
+    }
+
+    public static AccountBuilderCard builder() {
+        return card -> pin -> balance -> () -> new Account(card, pin, balance);
+    }
+
+    public interface AccountBuilderCard {
+        AccountBuilderPin setCard(final String cardNumber);
+    }
+
+    public interface AccountBuilderPin {
+        AccountBuilderBalance setPin(final String pin);
+    }
+
+    public interface AccountBuilderBalance {
+        AccountBuilder setBalance(final long balance);
+    }
+
+    public interface AccountBuilder {
+        Account build();
     }
 }

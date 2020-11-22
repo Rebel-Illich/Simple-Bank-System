@@ -14,13 +14,15 @@ public class LuhnAlgorithm {
                 }
                 sum += digit;
             }
-            return sum;
+
         }
+        return sum;
+    }
 
 
-        public static int calculateChecksum(final String number){
-            final int checksum = 10 - getControlNumber(number) % 10;
-            return checksum % 10;
-        }
+
+    public static int calculateChecksum( final String number) {
+        final int checksum = 10 - getControlNumber(number) % 10;
+        return checksum % 10;
     }
 }
