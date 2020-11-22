@@ -5,10 +5,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class InMemoryDatabase implements AccountsRepository {
+    private static long lastAccountNumber = 1;
     private List<Account> accounts;
 
     public InMemoryDatabase(List<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    @Override
+    public Account createAccount() {
+        Account account = new Account(lastAccountNumber++);
+        addAccount(account);
+        return account;
     }
 
     @Override

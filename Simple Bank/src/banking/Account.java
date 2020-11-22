@@ -6,18 +6,16 @@ public class Account {
     private static final Random random = new Random();
     private static final String INN = "400000";
 
-    private static long lastAccountNumber =1L;
+    private static long lastAccountNumber =1;
 
-
-    private long customerAccountNumber;
-    private String cardNumber;
+    private long accountNumber;
     private int checksum;
     private int pin;
     private long balance;
-    public Account(){
-        customerAccountNumber = lastAccountNumber++;
 
-        checksum = 0;
+    public Account(final long id) {
+        accountNumber = id;
+        checksum = LuhnAlgorithm.calculateChecksum(INN + getAccountNumber());
         balance = 0;
         pin = generatePin();
     }
@@ -26,10 +24,14 @@ public class Account {
         return String.format("%04d", pin);
     }
 
+    public String getAccountNumber() {
+        return String.format("%09d", accountNumber);
+    }
+
 
 
     public String getCardNumber(){
-    return String.format("%s%09d%d", INN, customerAccountNumber, checksum);
+    return String.format("%s%09d%d", INN, accountNumber, checksum);
     }
 
     private static int generatePin(){
