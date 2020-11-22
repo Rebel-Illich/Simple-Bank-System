@@ -4,7 +4,7 @@ import banking.Account;
 import java.util.Optional;
 
 public interface AccountsRepository {
-    void addAccount(Account account);
+
 
     Account createAccount();
 
