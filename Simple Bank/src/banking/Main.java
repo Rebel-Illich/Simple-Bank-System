@@ -16,8 +16,7 @@ public class Main {
 
      static {
           try{
-               LogManager.getLogManager().readConfiguration(
-                       new FileInputStream("logging.properties"));
+               LogManager.getLogManager().readConfiguration(new FileInputStream("logging.properties"));
           } catch (IOException e){
                System.err.println("Could not setup logger configuration: " + e.toString());
           }
@@ -29,7 +28,7 @@ public class Main {
           System.out.println("Hello World!!!");
 
 
-          new Application( args.length == 2
+          new Application( args.length == 2  && "-fileName".equals(args[0])
                   ? new SQLiteDatabase(args[1])
                   : new InMemoryDatabase(new ArrayList<>())
           ).run();
