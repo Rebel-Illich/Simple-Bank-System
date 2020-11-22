@@ -1,5 +1,6 @@
 package banking;
 
+import banking.domain.Account;
 import banking.repository.AccountsRepository;
 
 import java.sql.SQLOutput;
@@ -41,22 +42,13 @@ public final class Application implements Runnable {
         return Integer.parseInt(scanner.nextLine());
     }
 
-
     private void createAccount() {
         log.info("Create an account");
         final var account = repository.createAccount();
 
         System.out.println("Your account has been created\n" +
-                "Your card number:\n" +
-                "4000004938320895\n" +
-                "Your card PIN:\n" +
-                "6826" +
                 "Your card number:\n" + account.getCardNumber() +
                         "\nYour card PIN:\n" + account.getPinNumber());
-    }
-
-    private String createCardNumber(){
-        return "4000004938320895";
     }
 
     private void logIntoAccount(){
@@ -71,27 +63,27 @@ public final class Application implements Runnable {
                 .ifPresentOrElse(this::manageAccount, this::wrongAccount);
     }
 
-    private void wrongAccount(){
-        log.warning("Wrong card number PIN!");
-        System.out.println("Wrong card number or PIN!");
-    }
-
-    private void manageAccount(final Account account){
+    private void manageAccount(Account account) {
         log.info("You have successfully logged in!");
 
         System.out.println("You have successfully logged in!");
-       while(true){
-           System.out.println("1.Balance\n" + "2.Log out\n" + "0.Exit");
-           final int choice = getMenuItem();
-           switch(choice){
-               case 0:
-                   System.exit(0);
-               case 1:
-                   System.out.println("Balance: " + account.getBalance());
-                   break;
-               case 2:
-                   return;
-           }
-       }
+        while(true){
+            System.out.println("1.Balance\n" + "2.Log out\n" + "0.Exit");
+            final int choice = getMenuItem();
+            switch(choice){
+                case 0:
+                    System.exit(0);
+                case 1:
+                    System.out.println("Balance: " + account.getBalance());
+                    break;
+                case 2:
+                    return;
+            }
+        }
+    }
+
+    private void wrongAccount(){
+        log.warning("Wrong card number PIN!");
+        System.out.println("Wrong card number or PIN!");
     }
 }

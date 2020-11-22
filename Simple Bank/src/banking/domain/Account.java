@@ -20,7 +20,7 @@ public final class Account {
         pinNumber = format("%04d", generatePin());
     }
 
-    public Account(String card, String pin, long balance) {
+    public Account() {
         this.cardNumber = card;
         this.pinNumber = pin;
         this.balance = balance;
