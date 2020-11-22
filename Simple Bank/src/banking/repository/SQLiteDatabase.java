@@ -23,5 +23,5 @@ public class SQLiteDatabase implements AccountsRepository {
     public Account createAccount() {
         return null;
     }
-    
+
 }
