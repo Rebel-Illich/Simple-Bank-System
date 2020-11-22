@@ -8,6 +8,7 @@ import static java.lang.String.format;
 public final class Account {
     private static final Random random = new Random();
     private static final String IIN = "400000";
+    private static long lastAccountNumber = 1;
 
     private final String cardNumber;
     private String pinNumber;
@@ -20,11 +21,6 @@ public final class Account {
         pinNumber = format("%04d", generatePin());
     }
 
-    public Account() {
-        this.cardNumber = card;
-        this.pinNumber = pin;
-        this.balance = balance;
-    }
 
     public String getPinNumber() {
         return pinNumber;
@@ -38,33 +34,7 @@ public final class Account {
         return balance;
     }
 
-    public void addIncome(final long income) {
-        balance += income;
-    }
 
-    public boolean isCorrectPin(final String pinNumber) {
-        return Objects.equals(this.pinNumber, pinNumber);
-    }
-
-    public static AccountBuilderCard builder() {
-        return card -> pin -> balance -> () -> new Account(card, pin, balance);
-    }
-
-    public interface AccountBuilderCard {
-        AccountBuilderPin setCard(final String cardNumber);
-    }
-
-    public interface AccountBuilderPin {
-        AccountBuilderBalance setPin(final String pin);
-    }
-
-    public interface AccountBuilderBalance {
-        AccountBuilder setBalance(final long balance);
-    }
-
-    public interface AccountBuilder {
-        Account build();
-    }
 
     private static int generatePin() {
         return random.nextInt(10000);
