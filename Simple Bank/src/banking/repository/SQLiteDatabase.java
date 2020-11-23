@@ -20,33 +20,28 @@ public class SQLiteDatabase implements AccountsRepository {
     public SQLiteDatabase(String databaseName) {
         this.databaseName = databaseName;
         url = "jdbc:sqlite:./" + databaseName;
-        log.info("Created SQLiteDatabase with url=" + url);
+        log.info("Used SQLite3 Database with url=" + url);
     }
 
 
 
     @Override
     public Optional<Account> getAccount(final String creditCardNumber, final String pinNumber) {
-        try (final var connection = DriverManager.getConnection(url)) {
-            connection.setAutoCommit(false);
-            final var query = String.format("SELECT number, pin, balance FROM card WHERE number = %s AND pin = %s",
-                    creditCardNumber, pinNumber);
-            try (final var statement = connection.createStatement();
-                 final var resultSet = statement.executeQuery(query)) {
+        try (final var connection = DriverManager.getConnection(url);
+             final var sql = connection.prepareStatement(SQL_FIND_ACCOUNT)) {
+            sql.setNString(1, creditCardNumber);
+            sql.setNString(2, pinNumber);
+            final var resultSet = sql.executeQuery();
 
-                if (!resultSet.next()) {
-                    return Optional.empty();
-                }
-                final var bankAccount = Account.builder()
-                        .setCard(resultSet.getString("number"))
-                        .setPin(resultSet.getString("pin"))
-                        .setBalance(resultSet.getInt("balance"))
-                        .build();
-                return Optional.of(bankAccount);
-
-            } catch (SQLException e) {
-                log.log(Level.WARNING, "Can't get account from " + databaseName, e);
+            if (!resultSet.next()) {
+                return Optional.empty();
             }
+            final var bankAccount = Account.builder()
+                    .setCard(resultSet.getString("number"))
+                    .setPin(resultSet.getString("pin"))
+                    .setBalance(resultSet.getInt("balance"))
+                    .build();
+            return Optional.of(bankAccount);
 
         } catch (SQLException e) {
             log.log(Level.WARNING, "Can't connect to " + databaseName, e);
@@ -55,28 +50,27 @@ public class SQLiteDatabase implements AccountsRepository {
     }
 
     @Override
-    public Account createAccount() {
+    public Optional <Account> createAccount() {
         log.info("Create Account");
         try (final var connection = DriverManager.getConnection(url)) {
             connection.setAutoCommit(false);
             final var account = new Account(generateAccountId());
-            final var query = String.format("INSERT INTO card (number, pin) VALUES (%s, %s)",
-                    account.getCardNumber(), account.getPinNumber());
+            sql.setNString(1, account.getCardNumber());
+            sql.setNString(2, account.getPinNumber());
+            sql.executeUpdate();
 
-            try (final var statement = connection.createStatement()) {
-                statement.executeUpdate(query);
-                connection.commit();
-                log.info(() -> String.format("Saved to database: Card: %s Pin: %s Balance: %d",
-                        account.getCardNumber(), account.getPinNumber(), account.getBalance()));
-                return account;
+            log.info(() -> String.format("Saved to database: Card: %s Pin: %s Balance: %d",
+                    account.getCardNumber(), account.getPinNumber(), account.getBalance()));
+
+            return Optional.of(account);
             } catch (SQLException e) {
                 log.log(Level.WARNING, "Can't add new account to " + databaseName, e);
             }
         } catch (SQLException e) {
-            log.log(Level.WARNING, "Can't connect to " + databaseName, e);
+        log.log(Level.WARNING, "Can't add account to " + databaseName, e);
         }
-        return null;
-    }
+        return Optional.empty();
+
 
     private static long generateAccountId() {
         return ThreadLocalRandom.current().nextLong(100000000L, 999999999L);

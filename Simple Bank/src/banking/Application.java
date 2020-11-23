@@ -44,16 +44,16 @@ public class Application implements Runnable {
 
     private void createAccount() {
         log.info("1. Create an account");
+        repository.createAccount()
+                .ifPresentOrElse(this::printCardCreated,
+                        () -> System.out.println("Can't create an account"));
+    }
 
-        final var account = repository.createAccount();
 
+    private void printCardCreated(Account card) {
         System.out.println("Your account has been created\n" +
-                "Your card number:\n" +
-                "4000004938320895\n" +
-                "Your card PIN:\n" +
-                "6826" +
-                "Your card number:\n" + account.getCardNumber() +
-                        "\nYour card PIN:\n" + account.getPinNumber());
+                "Your card number:\n" + card.getCardNumber() +
+                "\nYour card PIN:\n" + card.getPinNumber());
     }
 
     private String createCardNumber(){
