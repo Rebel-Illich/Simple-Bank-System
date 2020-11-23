@@ -8,15 +8,13 @@ public class Account {
     private static final Random random = new Random();
     private static final String INN = "400000";
 
-    private static long lastAccountNumber =1;
-
     private final String cardNumber;
     private String pinNumber;
     private long balance;
 
     public Account(final long id) {
-        accountNumber = id;
-       var checksum = LuhnAlgorithm.calculateChecksum(INN + getAccountNumber());
+
+       var checksum = LuhnAlgorithm.calculateChecksum(INN + format("%09d", id));
         balance = 0;
         cardNumber = format("%s%09d%d", INN, id, checksum);
         pinNumber = format("%04d", generatePin());
