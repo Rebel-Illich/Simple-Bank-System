@@ -1,22 +1,26 @@
 package banking.repository;
 
-
+import banking.Account;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import banking.Account;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import java.util.Optional;
+
 
 public class SQLiteDatabase implements AccountsRepository {
 
     private static final Logger log = Logger.getLogger(SQLiteDatabase.class.getName());
 
+    private static final String SQL_ADD_ACCOUNT = "INSERT INTO card (number, pin) VALUES (?, ?)";
+    private static final String SQL_FIND_ACCOUNT = "SELECT number, pin, balance FROM card WHERE number = ? AND pin = ?";
+
     private final String databaseName;
     private final String url;
+
     public SQLiteDatabase(String databaseName) {
         this.databaseName = databaseName;
         url = "jdbc:sqlite:./" + databaseName;
@@ -55,8 +59,9 @@ public class SQLiteDatabase implements AccountsRepository {
         try (final var connection = DriverManager.getConnection(url)) {
             connection.setAutoCommit(false);
             final var account = new Account(generateAccountId());
-            sql.setNString(1, account.getCardNumber());
-            sql.setNString(2, account.getPinNumber());
+            sql.setString(1, creditCardNumber);
+            sql.setString(2, pinNumber);
+            log.finest(sql::toString);
             sql.executeUpdate();
 
             log.info(() -> String.format("Saved to database: Card: %s Pin: %s Balance: %d",
